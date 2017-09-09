@@ -14,7 +14,6 @@ module ParkingLot
       end
       occupied_lot = []
       lots = []
-      pointer = 0
       loop do
         command = gets.chomp
         if command == 'status'
@@ -33,6 +32,12 @@ module ParkingLot
                                                  lots,
                                                  occupied_lot,
                                                  vacant_lot)
+        elsif command[0..32] == 'slot_numbers_for_cars_with_colour'
+          color = command.split(' ')[1]
+          fetch_coloured_car(color, lots)
+        elsif command[0..34] == 'slot_number_for_registration_number'
+          reg_no = command.split(' ')[1]
+          fetch_slot_no(reg_no, lots)
         end
       end
     end
