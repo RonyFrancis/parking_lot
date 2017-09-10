@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "parking_lot"
+# srequire "parking_lot"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
