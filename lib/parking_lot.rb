@@ -2,43 +2,44 @@ require 'parking_lot/version'
 require 'command_operation'
 
 module ParkingLot
-  # Your code goes here...
+  # Parking slot problem
   class ParkingLot < CommandOperation
-    def run
-      puts %(No of Parking Lots: )
-      no_of_lots = gets.chomp.to_i
-      puts %(No of Parking Lot is #{no_of_lots})
-      vacant_lot = []
-      (1..no_of_lots).each do |lot|
-        vacant_lot << lot
-      end
-      occupied_lot = []
-      lots = []
+    # execute by command line
+    def command_line(create_parking_lot)
+      vacant_slot = []
+      vacant_slot, no_of_slots = initialise_vacant_slot(create_parking_lot,
+                                                        vacant_slot)
+      occupied_slot = []
+      slots = []
       loop do
         command = gets.chomp
-        if command == 'status'
-          status(lots)
-        elsif command[0..3] == 'park'
-          if occupied_lot.size != no_of_lots
-            lots, occupied_lot, vacant_lot = parking(command,
-                                                     lots,
-                                                     occupied_lot,
-                                                     vacant_lot)
-          else
-            puts 'parking is full'
-          end
-        elsif command[0..4] == 'leave'
-          lots, occupied_lot, vacant_lot = leave(command,
-                                                 lots,
-                                                 occupied_lot,
-                                                 vacant_lot)
-        elsif command[0..32] == 'slot_numbers_for_cars_with_colour'
-          color = command.split(' ')[1]
-          fetch_coloured_car(color, lots)
-        elsif command[0..34] == 'slot_number_for_registration_number'
-          reg_no = command.split(' ')[1]
-          fetch_slot_no(reg_no, lots)
-        end
+        operation(command, vacant_slot, occupied_slot, slots, no_of_slots)
+      end
+    end
+
+    # execute by file read
+    def file_read(file_name)
+      lines = File.readlines(file_name)
+      vacant_slot = []
+      occupied_slot = []
+      slots = []
+      no_of_slots = 0
+      if lines.first[0..17] == 'create_parking_lot'
+        vacant_slot, no_of_slots = initialise_vacant_slot(lines.first,
+                                                          vacant_slot)
+      end
+      lines.each do |line|
+        operation(line, vacant_slot, occupied_slot, slots, no_of_slots)
+      end
+    end
+
+    # run
+    def run
+      first_command = gets.chomp
+      if first_command.include?('.txt')
+        file_read(first_command)
+      else
+        command_line(first_command)
       end
     end
   end
