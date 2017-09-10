@@ -20,6 +20,7 @@ module ParkingLot
     # execute by file read
     def file_read(file_name)
       lines = File.readlines(file_name)
+      puts lines
       vacant_slot = []
       occupied_slot = []
       slots = []

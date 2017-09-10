@@ -53,13 +53,33 @@ RSpec.describe ParkingLot::CommandOperation do
     end
   end
 
-  describe 'fetch_coloured_car' do
+  describe 'fetch slot no from color' do
     before(:each) do
       @slots = [{ :reg_no=>"KA-01-HH-1234", :color=>"White", :slot_id=>1 }]
       @command = 'slot_numbers_for_cars_with_colour White'
     end
     it 'return colored cars' do
-      expect(@command_operation.fetch_coloured_car(@command, @slots)).to be (puts "1")
+      expect(@command_operation.fetch_coloured_car(@command.split(' ')[1], @slots)).to be (puts "1")
+    end
+  end
+
+  describe 'fetch_slot_no from regno' do
+    before(:each) do
+      @slots = [{ :reg_no=>"KA-01-HH-3141", :color=>"White", :slot_id=>1 }]
+      @command = 'slot_number_for_registration_number KA-01-HH-3141'
+    end
+    it 'return colored cars' do
+      expect(@command_operation.fetch_slot_no(@command.split(' ')[1], @slots)).to be (puts "1")
+    end
+  end
+
+  describe 'fetch_reg_no from color' do
+    before(:each) do
+      @slots = [{ :reg_no=>"KA-01-HH-3141", :color=>"White", :slot_id=>1 }]
+      @command = 'registration_numbers_for_cars_with_colour White'
+    end
+    it 'return reg_no' do
+      expect(@command_operation.fetch_reg_no(@command.split(' ')[1], @slots)).to be (puts "KA-01-HH-3141")
     end
   end
 end
